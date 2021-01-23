@@ -6,13 +6,13 @@ import {
 } from '../../requests'
 
 const actions = {
-	toggleWeekends() {
+	toggleWeekends: () => {
 		return {
 			type: 'TOGGLE_WEEKENDS',
 		}
 	},
 
-	requestEvents(startStr, endStr) {
+	requestEvents: (startStr, endStr) => {
 		return dispatch => {
 			return requestEventsInRange(startStr, endStr).then(plainEventObjects => {
 				dispatch({
@@ -23,7 +23,7 @@ const actions = {
 		}
 	},
 
-	createEvent(plainEventObject) {
+	createEvent: plainEventObject => {
 		return dispatch => {
 			return requestEventCreate(plainEventObject).then(newEventId => {
 				dispatch({
@@ -37,7 +37,7 @@ const actions = {
 		}
 	},
 
-	updateEvent(plainEventObject) {
+	updateEvent: plainEventObject => {
 		return dispatch => {
 			return requestEventUpdate(plainEventObject).then(() => {
 				dispatch({
@@ -48,7 +48,7 @@ const actions = {
 		}
 	},
 
-	deleteEvent(eventId) {
+	deleteEvent: eventId => {
 		return dispatch => {
 			return requestEventDelete(eventId).then(() => {
 				dispatch({
