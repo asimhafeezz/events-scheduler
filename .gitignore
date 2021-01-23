@@ -5,6 +5,11 @@
 /.pnp
 .pnp.js
 
+# ignore components
+/src/components/FuncCalender.jsx
+/src/components/Calender.jsx
+/src/components/sidebar.js
+
 # testing
 /coverage
 
