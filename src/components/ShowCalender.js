@@ -4,29 +4,142 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 
+//action creater
+import actionCreators from '../store/events/actions'
+import { connect } from 'react-redux'
+import { createSelector } from 'reselect'
+import { getHashValues } from '../utils'
+
+//dialog box
+import DialogBox from './dailog'
+
+//render events
+const renderEventContent = eventInfo => {
+	return (
+		<>
+			<b>{eventInfo.timeText}</b>
+			<i>{eventInfo.event.title}</i>
+		</>
+	)
+}
+
 class EventsCalender extends React.Component {
+	state = {
+		open: false,
+		cal_api: null,
+	}
+
+	handleDateSelect = selectInfo => {
+		let calendarApi = selectInfo.view.calendar
+		// let title = prompt('Please enter a new title for your event')
+		this.setState({ cal_api: selectInfo, open: true })
+
+		// clear date selection
+		calendarApi.unselect()
+
+		// if (title) {
+		// 	calendarApi.addEvent(
+		// 		{
+		// 			title,
+		// 			start: selectInfo.startStr,
+		// 			end: selectInfo.endStr,
+		// 			allDay: selectInfo.allDay,
+		// 		},
+		// 		true
+		// 	)
+		// }
+	}
+
+	handleEventClick = clickInfo => {
+		if (
+			// eslint-disable-next-line no-restricted-globals
+			confirm(
+				`Are you sure you want to delete the event '${clickInfo.event.title}'`
+			)
+		) {
+			clickInfo.event.remove()
+		}
+	}
+
+	//handling events crud functionallity
+	handleDates = rangeInfo => {
+		this.props
+			.requestEvents(rangeInfo.startStr, rangeInfo.endStr)
+			.catch(err => console.log('err', err))
+	}
+
+	handleEventAdd = addInfo => {
+		this.props.createEvent(addInfo.event.toPlainObject()).catch(err => {
+			console.log('err', err)
+			addInfo.revert()
+		})
+	}
+
+	handleEventChange = changeInfo => {
+		this.props.updateEvent(changeInfo.event.toPlainObject()).catch(err => {
+			console.log('err', err)
+			changeInfo.revert()
+		})
+	}
+
+	handleEventRemove = removeInfo => {
+		this.props.deleteEvent(removeInfo.event.id).catch(err => {
+			console.log('err', err)
+			removeInfo.revert()
+		})
+	}
+
 	render() {
 		return (
-			<div className='events-calender-app'>
-				<div className='events-calender-app-main'>
-					<FullCalendar
-						plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-						headerToolbar={{
-							left: 'prev,next',
-							center: 'title',
-							right: 'dayGridMonth,timeGridWeek,timeGridDay',
-						}}
-						initialView='dayGridMonth'
-						editable={true}
-						selectable={true}
-						selectMirror={true}
-						dayMaxEvents={true}
-						weekends={true}
-					/>
+			<>
+				<DialogBox
+					open={this.state.open}
+					// handleOpen={this.setState({ open: true })}
+					handleClose={() => this.setState({ open: false })}
+					cal_api={this.state.cal_api}
+				/>
+				<div className='events-calender-app'>
+					<div className='events-calender-app-main'>
+						<FullCalendar
+							plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+							headerToolbar={{
+								left: 'prev,next',
+								center: 'title',
+								right: 'dayGridMonth,timeGridWeek,timeGridDay',
+							}}
+							initialView='dayGridMonth'
+							editable={true}
+							selectable={true}
+							selectMirror={true}
+							dayMaxEvents={true}
+							weekends={true}
+							datesSet={this.handleDates}
+							select={this.handleDateSelect}
+							events={this.props.events}
+							eventContent={renderEventContent}
+							eventClick={this.handleEventClick}
+							eventAdd={this.handleEventAdd}
+							eventChange={this.handleEventChange}
+							eventRemove={this.handleEventRemove}
+						/>
+					</div>
 				</div>
-			</div>
+			</>
 		)
 	}
 }
 
-export default EventsCalender
+function mapStateToProps() {
+	const getEventArray = createSelector(state => state.eventsById, getHashValues)
+
+	return state => {
+		return {
+			events: getEventArray(state),
+			weekendsVisible: state.weekendsVisible,
+		}
+	}
+}
+
+export default connect(mapStateToProps, actionCreators)(EventsCalender)
+
+// export default EventsCalender

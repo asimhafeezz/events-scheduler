@@ -59,3 +59,24 @@ b {
 	max-width: 1100px;
 	margin: 0 auto;
 }
+
+.addEventForm {
+	display: flex;
+	justify-content: space-around;
+	flex-direction: column;
+	height: 100px;
+}
+
+.addEventForm input,
+button {
+	padding: 0.3rem;
+	font-size: 1rem;
+	border: 1px solid black;
+	border-radius: 3px;
+}
+
+.addEventForm button:hover {
+	background-color: rgb(63, 63, 194);
+	color: azure;
+	cursor: pointer;
+}
