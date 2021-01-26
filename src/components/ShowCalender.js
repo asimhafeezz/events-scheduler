@@ -27,38 +27,27 @@ class EventsCalender extends React.Component {
 	state = {
 		open: false,
 		cal_api: null,
+		isAddEvent: false,
+		clickInfo: null,
 	}
 
 	handleDateSelect = selectInfo => {
 		let calendarApi = selectInfo.view.calendar
-		// let title = prompt('Please enter a new title for your event')
-		this.setState({ cal_api: selectInfo, open: true })
-
 		// clear date selection
 		calendarApi.unselect()
-
-		// if (title) {
-		// 	calendarApi.addEvent(
-		// 		{
-		// 			title,
-		// 			start: selectInfo.startStr,
-		// 			end: selectInfo.endStr,
-		// 			allDay: selectInfo.allDay,
-		// 		},
-		// 		true
-		// 	)
-		// }
+		this.setState({ isAddEvent: true, cal_api: selectInfo, open: true })
 	}
 
 	handleEventClick = clickInfo => {
-		if (
-			// eslint-disable-next-line no-restricted-globals
-			confirm(
-				`Are you sure you want to delete the event '${clickInfo.event.title}'`
-			)
-		) {
-			clickInfo.event.remove()
-		}
+		this.setState({ isAddEvent: false, open: true, clickInfo })
+		// if (
+		// 	// eslint-disable-next-line no-restricted-globals
+		// 	confirm(
+		// 		`Are you sure you want to delete the event '${clickInfo.event.title}'`
+		// 	)
+		// ) {
+		// 	clickInfo.event.remove()
+		// }
 	}
 
 	//handling events crud functionallity
@@ -94,8 +83,9 @@ class EventsCalender extends React.Component {
 			<>
 				<DialogBox
 					open={this.state.open}
-					// handleOpen={this.setState({ open: true })}
 					handleClose={() => this.setState({ open: false })}
+					isAddEvent={this.state.isAddEvent}
+					clickInfo={this.state.clickInfo}
 					cal_api={this.state.cal_api}
 				/>
 				<div className='events-calender-app'>
