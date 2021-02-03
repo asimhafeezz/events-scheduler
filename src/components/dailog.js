@@ -53,7 +53,7 @@ export default function DialogBox({
 				<DialogTitle
 					id='responsive-dialog-title'
 					style={{ color: ' rgb(63, 63, 194)' }}>
-					{'Add New Event'}
+					{isAddEvent ? 'Add New Event' : 'Delete Event'}
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
@@ -69,11 +69,11 @@ export default function DialogBox({
 								</>
 							) : (
 								<>
-									<input
+									{/* <input
 										value={title}
 										onChange={e => setTitle(e.target.value)}
-										placeholder='Update an event title'
-									/>
+										placeholder='Update an event title' */}
+									{/* /> */}
 									<button del={false} type='submit'>
 										Delete Event
 									</button>

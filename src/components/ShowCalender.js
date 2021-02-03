@@ -40,14 +40,6 @@ class EventsCalender extends React.Component {
 
 	handleEventClick = clickInfo => {
 		this.setState({ isAddEvent: false, open: true, clickInfo })
-		// if (
-		// 	// eslint-disable-next-line no-restricted-globals
-		// 	confirm(
-		// 		`Are you sure you want to delete the event '${clickInfo.event.title}'`
-		// 	)
-		// ) {
-		// 	clickInfo.event.remove()
-		// }
 	}
 
 	//handling events crud functionallity
@@ -131,5 +123,3 @@ function mapStateToProps() {
 }
 
 export default connect(mapStateToProps, actionCreators)(EventsCalender)
-
-// export default EventsCalender

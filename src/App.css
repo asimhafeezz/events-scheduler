@@ -64,7 +64,7 @@ b {
 	display: flex;
 	justify-content: space-around;
 	flex-direction: column;
-	height: 100px;
+	height: 70px;
 }
 
 .addEventForm input,
